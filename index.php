@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Уязвимость #2: Прямая передача пользовательского ввода в команду
             $quality = isset($_POST['quality']) ? $_POST['quality'] : 85;
-            $command = "convert -quality $quality $targetFile $outputFile 2>&1";
+            $command = "convert -quality ".escapeshellarg($quality).escapeshellarg($targetFile).escapeshellarg($outputFile)." 2>&1";
             $output = shell_exec($command);
             
             if (file_exists($outputFile)) {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($_FILES['archive_file']['tmp_name'], $archiveFile)) {
             $outputArchiveType = $_POST['archive_format'];
             $outputArchiveFile = $archiveFile . '.' . $outputArchiveType;
-            $command = "zip -r $outputArchiveFile $archiveFile 2>&1";
+            $command = "zip -r ".escapeshellarg($outputArchiveFile).escapeshellarg($archiveFile)." 2>&1";
             $output = shell_exec($command);
             
             if (file_exists($outputArchiveFile)) {
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($_FILES['audio_file']['tmp_name'], $audioFile)) {
             $outputAudioFormat = $_POST['audio_format'];
             $outputAudioFile = $audioFile . '.' . $outputAudioFormat;
-            $command = "ffmpeg -i $audioFile $outputAudioFile 2>&1";
+            $command = "ffmpeg -i ".escapeshellarg($audioFile).escapeshellarg($outputAudioFile)." 2>&1";
             $output = shell_exec($command);
             
             if (file_exists($outputAudioFile)) {
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($_FILES['video_file']['tmp_name'], $videoFile)) {
             $outputVideoFormat = $_POST['video_format'];
             $outputVideoFile = $videoFile . '.' . $outputVideoFormat;
-            $command = "ffmpeg -i $videoFile $outputVideoFile 2>&1";
+            $command = "ffmpeg -i ".escapeshellarg($videoFile).escapeshellarg($outputVideoFile)." 2>&1";
             $output = shell_exec($command);
             
             if (file_exists($outputVideoFile)) {
